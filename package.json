@@ -1,0 +1,11 @@
+{
+  "name": "netlify-plugin-process-cleanup",
+  "version": "1.0.0",
+  "description": "Cleanup running processes after a build",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mike Heffner <mikeh@fesnel.com>",
+  "license": "MIT"
+}
