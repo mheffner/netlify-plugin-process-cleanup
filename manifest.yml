@@ -1,2 +1,6 @@
 name: netlify-plugin-process-cleanup
 
+inputs:
+  - name: signal
+    description: Signal to kill processes with
+    default: SIGKILL
