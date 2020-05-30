@@ -3,8 +3,7 @@ const { exec } = require("child_process");
 module.exports = {
   onEnd: async ({ utils: { build, status, cache, run, git } }) => {
     let q = "ps --no-headers -a -x -o '%p,%a' | grep -v ps | grep -v grep | grep -v bash | " +
-        "grep -v /usr/local/bin/buildbot | grep -v defunct | grep -vw '\[build\]' | " +
-        "grep -v plugins/child/main.js || true";
+        "grep -vw '\[build\]' || true ";
 
     const { stdout, stderr, exitCode } = await run(q, { shell: true, reject: false, stdout: 'pipe' });
     if (exitCode != 0) {
@@ -21,12 +20,20 @@ module.exports = {
       if (sp.length != 2) {
         continue;
       }
-      let msg = `Killing running process '${sp[1]}' with PID: ${sp[0]}.`;
+      let pid = parseInt(sp[0], 10);
+      let cmd = sp[1];
+
+      // prevent a self kill and don't kill buildbot
+      if (1 == pid || process.pid == pid || process.ppid == pid) {
+        continue;
+      }
+
+      let msg = `Killing running process '${cmd}' with PID: ${pid}.`;
       msgs.push(msg);
       console.log(msg);
 
       // normally would try TERM, wait, and then KILL, but time is money
-      process.kill(sp[0], 'SIGKILL');
+      process.kill(pid, 'SIGKILL');
       killed++;
     }
 
