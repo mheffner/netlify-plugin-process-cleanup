@@ -1,7 +1,7 @@
 const { exec } = require("child_process");
 
 module.exports = {
-  onEnd: async ({ utils: { build, status, cache, run, git } }) => {
+  onEnd: async ({ inputs, utils: { build, status, cache, run, git } }) => {
     let q = "ps --no-headers -a -x -o '%p,%a' | grep -v ps | grep -v grep | grep -v bash | " +
         "grep -vw '\[build\]' || true ";
 
@@ -28,12 +28,11 @@ module.exports = {
         continue;
       }
 
-      let msg = `Killing running process '${cmd}' with PID: ${pid}.`;
+      let msg = `Killing running process '${cmd}', PID: ${pid}, with signal ${inputs.signal}.`;
       msgs.push(msg);
       console.log(msg);
 
-      // normally would try TERM, wait, and then KILL, but time is money
-      process.kill(pid, 'SIGKILL');
+      process.kill(pid, inputs.signal);
       killed++;
     }
 
