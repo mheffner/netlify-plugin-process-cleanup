@@ -6,7 +6,7 @@ module.exports = {
         "grep -v /usr/local/bin/buildbot | grep -v defunct | grep -vw '\[build\]' | " +
         "grep -v plugins/child/main.js || true";
 
-    const { stdout, stderr, exitCode } = await run(q, { shell: true });
+    const { stdout, stderr, exitCode } = await run(q, { shell: true, reject: false, stdout: 'pipe' });
     if (exitCode != 0) {
       build.failPlugin(`Failed to query process list: ${stderr}`);
       return;
