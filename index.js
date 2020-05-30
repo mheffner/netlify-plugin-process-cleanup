@@ -32,8 +32,15 @@ module.exports = {
       msgs.push(msg);
       console.log(msg);
 
-      process.kill(pid, inputs.signal);
       killed++;
+      try {
+        process.kill(pid, inputs.signal);
+      } catch (e) {
+        // Don't treat as fatal, process may have exited before killed
+        let errmsg = `Failed to kill PID ${pid}: ${e}`;
+        console.log(errmsg);
+        msgs.push(errmsg);
+      }
     }
 
     if (killed == 0) {
