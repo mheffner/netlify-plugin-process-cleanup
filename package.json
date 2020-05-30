@@ -1,5 +1,5 @@
 {
-  "name": "netlify-\plugin-process-cleanup",
+  "name": "netlify-plugin-process-cleanup",
   "version": "1.1.1",
   "description": "Cleanup running processes after a build",
   "main": "index.js",
